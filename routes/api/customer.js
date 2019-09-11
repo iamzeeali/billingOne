@@ -10,9 +10,11 @@ const Customer = require("../../models/Customer");
 // @route    GET api/customer
 // @desc     Get all users customers
 // @access   private
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
   try {
-    const customers = await Customer.find().sort({ date: -1 });
+    const customers = await Customer.find({ user: req.user.id }).sort({
+      date: -1
+    });
     res.json(customers);
   } catch (err) {
     console.error(err.message);
@@ -31,6 +33,11 @@ router.get("/:id", auth, async (req, res) => {
       return res.status(404).json({ msg: "Customer not found" });
     }
 
+    // Make sure user owns customer
+    if (customer.user.toString() !== req.user.id) {
+      return res.status(401).json({ msg: "Not authorized" });
+    }
+
     res.json(customer);
   } catch (err) {
     console.error(err.message);
@@ -47,6 +54,7 @@ router.get("/:id", auth, async (req, res) => {
 router.post(
   "/",
   [
+    auth,
     [
       check("cCode", "Customer Code is required")
         .not()
@@ -95,7 +103,8 @@ router.post(
         shipState: req.body.shipState,
         billAddress: req.body.billAddress,
         billCity: req.body.billCity,
-        billState: req.body.billState
+        billState: req.body.billState,
+        user: req.user.id
       });
 
       const customer = await newCustomer.save();
@@ -151,6 +160,10 @@ router.put("/:id", auth, async (req, res) => {
 
     if (!customer) return res.status(404).json({ msg: "Customer not found" });
 
+    // Make sure user owns customer
+    if (customer.user.toString() !== req.user.id) {
+      return res.status(401).json({ msg: "Not authorized" });
+    }
     customer = await Customer.findByIdAndUpdate(
       req.params.id,
       { $set: customerFields },
@@ -172,6 +185,11 @@ router.delete("/:id", auth, async (req, res) => {
     let customer = await Customer.findById(req.params.id);
 
     if (!customer) return res.status(404).json({ msg: "Customer not found" });
+
+    // Make sure user owns customer
+    if (customer.user.toString() !== req.user.id) {
+      return res.status(401).json({ msg: "Not authorized" });
+    }
 
     await Customer.findByIdAndRemove(req.params.id);
 

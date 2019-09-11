@@ -10,9 +10,9 @@ const Staff = require("../../models/Staff");
 // @route    GET api/staff
 // @desc     Get all users staffs
 // @access   private
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
   try {
-    const staffs = await Staff.find().sort({ date: -1 });
+    const staffs = await Staff.find({ user: req.user.id }).sort({ date: -1 });
     res.json(staffs);
   } catch (err) {
     console.error(err.message);
@@ -31,6 +31,11 @@ router.get("/:id", auth, async (req, res) => {
       return res.status(404).json({ msg: "Staff not found" });
     }
 
+    // Make sure user owns staff
+    if (staff.user.toString() !== req.user.id) {
+      return res.status(401).json({ msg: "Not authorized" });
+    }
+
     res.json(staff);
   } catch (err) {
     console.error(err.message);
@@ -47,6 +52,7 @@ router.get("/:id", auth, async (req, res) => {
 router.post(
   "/",
   [
+    auth,
     [
       check("firstName", "First Name is required")
         .not()
@@ -85,7 +91,8 @@ router.post(
         password: req.body.password,
         password2: req.body.password2,
         mobile: req.body.mobile,
-        email: req.body.email
+        email: req.body.email,
+        user: req.user.id
       });
 
       const staff = await newStaff.save();
@@ -112,7 +119,7 @@ router.put("/:id", auth, async (req, res) => {
     email
   } = req.body;
 
-  // Build contact object
+  // Build staff object
   const staffFields = {};
   if (firstName) staffFields.firstName = firstName;
   if (lastName) staffFields.lastName = lastName;
@@ -126,6 +133,11 @@ router.put("/:id", auth, async (req, res) => {
     let staff = await Staff.findById(req.params.id);
 
     if (!staff) return res.status(404).json({ msg: "Staff not found" });
+
+    // Make sure user owns staff
+    if (staff.user.toString() !== req.user.id) {
+      return res.status(401).json({ msg: "Not authorized" });
+    }
 
     staff = await Staff.findByIdAndUpdate(
       req.params.id,
@@ -148,6 +160,11 @@ router.delete("/:id", auth, async (req, res) => {
     let staff = await Staff.findById(req.params.id);
 
     if (!staff) return res.status(404).json({ msg: "Staff not found" });
+
+    // Make sure user owns staff
+    if (staff.user.toString() !== req.user.id) {
+      return res.status(401).json({ msg: "Not authorized" });
+    }
 
     await Staff.findByIdAndRemove(req.params.id);
 
