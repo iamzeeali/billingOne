@@ -13,7 +13,25 @@ const User = require("../../models/User");
 router.post(
   "/",
   [
-    check("name", "Name is required")
+    check("firstName", "First Name is required")
+      .not()
+      .isEmpty(),
+    check("lastName", "Last Name is required")
+      .not()
+      .isEmpty(),
+    check("username", "Username is required")
+      .not()
+      .isEmpty(),
+    check("company", "Company is required")
+      .not()
+      .isEmpty(),
+    check("country", "Country is required")
+      .not()
+      .isEmpty(),
+    check("city", "City is required")
+      .not()
+      .isEmpty(),
+    check("phone", "Phone is required")
       .not()
       .isEmpty(),
     check("email", "Please include a valid email").isEmail(),
@@ -28,19 +46,35 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { name, email, password } = req.body;
+    const {
+      firstName,
+      lastName,
+      username,
+      company,
+      country,
+      city,
+      phone,
+      email,
+      password
+    } = req.body;
 
     try {
-      let user = await User.findOne({ email });
+      let user = await User.findOne({ email, username });
 
-      if (user) {
+      if (user || username) {
         return res
           .status(400)
           .json({ errors: [{ msg: "User already exists" }] });
       }
 
       user = new User({
-        name,
+        firstName,
+        lastName,
+        username,
+        company,
+        country,
+        city,
+        phone,
         email,
         password
       });
@@ -60,7 +94,7 @@ router.post(
       jwt.sign(
         payload,
         config.get("jwtSecret"),
-        { expiresIn: 360000 },
+        { expiresIn: 3600 },
         (err, token) => {
           if (err) throw err;
           res.json({ token });
