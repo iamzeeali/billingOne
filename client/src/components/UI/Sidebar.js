@@ -16,6 +16,39 @@ class Sidebar extends Component {
 
     const authLinks = (
       <Fragment>
+        <nav className="navbar navbar-expand-sm sticky-top navbar-dark bg-dark border-bottom border-secondary">
+          <div className="container-fluid">
+            <Link className="navbar-brand" to="/">
+              <h2>Billing One</h2>
+            </Link>
+            <button
+              className="navbar-toggler"
+              type="button"
+              data-toggle="collapse"
+              data-target="#navbarNavDropdown"
+              aria-controls="navbarNavDropdown"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span className="navbar-toggler-icon"></span>
+            </button>
+            <div className="collapse navbar-collapse" id="navbarNavDropdown">
+              <ul className="navbar-nav ml-auto">
+                <li className="nav-item">
+                  <Link
+                    className="nav-link"
+                    to=""
+                    onClick={this.onLogoutHandler.bind(this)}
+                  >
+                    <i className="fa fa-power-off" /> Logout
+                    <span className="sr-only">(current)</span>
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+
         <div className="page-wrapper chiller-theme toggled">
           <Link id="show-sidebar" className="btn btn-sm btn-dark" to="#">
             <i className="fas fa-bars"></i>
@@ -23,7 +56,9 @@ class Sidebar extends Component {
           <nav id="sidebar" className="sidebar-wrapper">
             <div className="sidebar-content">
               <div className="sidebar-brand">
-                <Link to="/dashboard">Billing One</Link>
+                <Link to="/dashboard" className="lead">
+                  Globus Labs
+                </Link>
                 <div id="close-sidebar">
                   <i className="fas fa-times"></i>
                 </div>
@@ -59,13 +94,13 @@ class Sidebar extends Component {
                     </Link>
                   </li>
                   <li>
-                    <Link to="/staff">
-                      <i className="fa fa-book"></i>
-                      <span>Staffs</span>
+                    <Link to="/staffs">
+                      <i className="fab fa-black-tie"></i>
+                      <span>Employees</span>
                     </Link>
                   </li>
                   <li>
-                    <Link to="#">
+                    <Link to="/customers">
                       <i className="fa fa-book"></i>
                       <span>Customers</span>
                     </Link>
@@ -73,7 +108,7 @@ class Sidebar extends Component {
                   <li>
                     <Link to="#">
                       <i className="fa fa-book"></i>
-                      <span>Suppliers</span>
+                      <span>Vendors</span>
                     </Link>
                   </li>
                   <li>
@@ -239,7 +274,7 @@ class Sidebar extends Component {
 
     const guestLinks = (
       <Fragment>
-        <nav className="navbar navbar-expand-sm navbar-dark bg-primary">
+        <nav className="navbar navbar-expand-sm navbar-dark bg-dark border-bottom border-secondary">
           <div className="container">
             <Link className="navbar-brand" to="/">
               <h2>Billing One</h2>

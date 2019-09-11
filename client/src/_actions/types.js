@@ -9,9 +9,24 @@ export const LOGOUT = "LOGOUT";
 export const SET_ALERT = "SET_ALERT";
 export const REMOVE_ALERT = "REMOVE_ALERT";
 
+export const GET_STAFF = "GET_STAFF";
 export const GET_STAFFS = "GET_STAFFS";
 export const ADD_STAFF = "ADD_STAFF";
+export const UPDATE_STAFF = "UPDATE_STAFF";
+export const SET_CURRENT_STAFF = "SET_CURRENT_STAFF";
 export const CLEAR_STAFF = "CLEAR_STAFF";
+export const DELETE_STAFF = "DELETE_STAFF";
 export const STAFF_ERROR = "STAFF_ERROR";
 export const FILTER_STAFF = "FILTER_STAFF";
-export const CLEAR_FILTER = "FILTER_STAFF";
+
+export const CLEAR_FILTER = "CLEAR_FILTER";
+
+export const GET_CUSTOMER = "GET_CUSTOMER";
+export const GET_CUSTOMERS = "GET_CUSTOMERS";
+export const ADD_CUSTOMER = "ADD_CUSTOMER";
+export const UPDATE_CUSTOMER = "UPDATE_CUSTOMER";
+export const SET_CURRENT_CUSTOMER = "SET_CURRENT_CUSTOMER";
+export const CLEAR_CUSTOMER = "CLEAR_CUSTOMER";
+export const DELETE_CUSTOMER = "DELETE_CUSTOMER";
+export const CUSTOMER_ERROR = "CUSTOMER_ERROR";
+export const FILTER_CUSTOMER = "FILTER_CUSTOMER";

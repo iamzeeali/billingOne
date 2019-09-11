@@ -5,35 +5,19 @@ const CustomerSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "user"
   },
-  ccode: {
+  cCode: {
     type: String,
     required: true
   },
-  cname: {
+  cName: {
     type: String,
     required: true
   },
-  fax: {
+  crNumber: {
     type: String
   },
-  crnumber: {
+  cPerson: {
     type: String
-  },
-  shipaddress: {
-    type: String,
-    required: true
-  },
-  shipcity: {
-    type: String,
-    required: true
-  },
-  contactperson: {
-    type: String,
-    required: true
-  },
-  shipstate: {
-    type: String,
-    required: true
   },
   email: {
     type: String
@@ -44,15 +28,30 @@ const CustomerSchema = new mongoose.Schema({
   phone: {
     type: String
   },
-  billaddress: {
+  fax: {
+    type: String
+  },
+  shipAddress: {
     type: String,
     required: true
   },
-  billcity: {
+  shipCity: {
     type: String,
     required: true
   },
-  billstate: {
+  shipState: {
+    type: String,
+    required: true
+  },
+  billAddress: {
+    type: String,
+    required: true
+  },
+  billCity: {
+    type: String,
+    required: true
+  },
+  billState: {
     type: String,
     required: true
   },

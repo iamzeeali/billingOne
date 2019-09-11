@@ -1,8 +1,8 @@
 import React, { useRef, useEffect } from "react";
 import { connect } from "react-redux";
-import { filterStaff, clearFilter } from "../../_actions/staff";
+import { filterCustomer, clearFilter } from "../../_actions/customer";
 
-const FilterStaffs = ({ filterStaff, clearFilter, filtered }) => {
+const FilterCustomer = ({ filterCustomer, clearFilter, filtered }) => {
   const text = useRef("");
 
   useEffect(() => {
@@ -13,7 +13,7 @@ const FilterStaffs = ({ filterStaff, clearFilter, filtered }) => {
 
   const onChangeHandler = e => {
     if (text.current.value !== null) {
-      filterStaff(e.target.value);
+      filterCustomer(e.target.value);
     } else {
       clearFilter();
     }
@@ -25,7 +25,7 @@ const FilterStaffs = ({ filterStaff, clearFilter, filtered }) => {
         ref={text}
         type="text"
         className="form-control search-menu"
-        placeholder="Search Employees..."
+        placeholder="Search Customers..."
         onChange={onChangeHandler}
       />
       <div className="input-group-append">
@@ -38,11 +38,11 @@ const FilterStaffs = ({ filterStaff, clearFilter, filtered }) => {
 };
 
 const mapStateToProps = state => ({
-  staffs: state.staff.staffs,
-  filtered: state.staff.filtered
+  customers: state.customer.customers,
+  filtered: state.customer.filtered
 });
 
 export default connect(
   mapStateToProps,
-  { filterStaff, clearFilter }
-)(FilterStaffs);
+  { filterCustomer, clearFilter }
+)(FilterCustomer);

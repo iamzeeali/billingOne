@@ -1,8 +1,8 @@
 import * as types from "../_actions/types";
 
 const initialState = {
-  staff: null,
-  staffs: [],
+  customer: null,
+  customers: [],
   error: {},
   filtered: null,
   loading: true
@@ -12,48 +12,48 @@ export default function(state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
-    case types.GET_STAFF:
+    case types.GET_CUSTOMER:
       return {
         ...state,
-        staff: payload,
+        customer: payload,
         loading: false
       };
-    case types.GET_STAFFS:
+    case types.GET_CUSTOMERS:
       return {
         ...state,
-        staffs: payload,
+        customers: payload,
         loading: false
       };
-    case types.ADD_STAFF:
+    case types.ADD_CUSTOMER:
       return {
         ...state,
-        staff: payload,
+        customer: payload,
         loading: false
       };
-    case types.SET_CURRENT_STAFF:
+    case types.SET_CURRENT_CUSTOMER:
       return {
         ...state,
-        staff: action.payload
+        customer: action.payload
       };
-    case types.CLEAR_STAFF:
+    case types.CLEAR_CUSTOMER:
       return {
         ...state,
-        staff: null,
-        staffs: [],
+        customer: null,
+        customers: [],
         loading: false
       };
 
-    case types.FILTER_STAFF:
+    case types.FILTER_CUSTOMER:
       return {
         ...state,
-        filtered: state.staffs.filter(staff => {
+        filtered: state.customers.filter(customer => {
           const regex = new RegExp(`${action.payload}`, "gi");
           return (
-            staff.firstName.match(regex) ||
-            staff.lastName.match(regex) ||
-            staff.email.match(regex) ||
-            staff.mobile.match(regex) ||
-            staff.username.match(regex)
+            customer.cCode.match(regex) ||
+            customer.cName.match(regex) ||
+            customer.cPerson.match(regex) ||
+            customer.email.match(regex) ||
+            customer.mobile.match(regex)
           );
         })
       };
@@ -62,13 +62,15 @@ export default function(state = initialState, action) {
         ...state,
         filtered: null
       };
-    case types.DELETE_STAFF:
+    case types.DELETE_CUSTOMER:
       return {
         ...state,
-        staffs: state.staffs.filter(staff => staff._id !== action.payload),
+        customers: state.customers.filter(
+          customer => customer._id !== action.payload
+        ),
         loading: false
       };
-    case types.STAFF_ERROR:
+    case types.CUSTOMER_ERROR:
       return {
         ...state,
         error: payload,

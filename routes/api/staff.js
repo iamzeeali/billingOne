@@ -102,7 +102,15 @@ router.post(
 // @desc      Update staff
 // @access    Private
 router.put("/:id", auth, async (req, res) => {
-  const { firstName, lastName, username, password, mobile, email } = req.body;
+  const {
+    firstName,
+    lastName,
+    username,
+    password,
+    password2,
+    mobile,
+    email
+  } = req.body;
 
   // Build contact object
   const staffFields = {};
@@ -110,6 +118,7 @@ router.put("/:id", auth, async (req, res) => {
   if (lastName) staffFields.lastName = lastName;
   if (username) staffFields.username = username;
   if (password) staffFields.password = password;
+  if (password2) staffFields.password = password2;
   if (mobile) staffFields.mobile = mobile;
   if (email) staffFields.email = email;
 
@@ -117,11 +126,6 @@ router.put("/:id", auth, async (req, res) => {
     let staff = await Staff.findById(req.params.id);
 
     if (!staff) return res.status(404).json({ msg: "Staff not found" });
-
-    // Make sure user owns staff
-    if (staff.user.toString() !== req.user.id) {
-      return res.status(401).json({ msg: "Not authorized" });
-    }
 
     staff = await Staff.findByIdAndUpdate(
       req.params.id,
@@ -144,11 +148,6 @@ router.delete("/:id", auth, async (req, res) => {
     let staff = await Staff.findById(req.params.id);
 
     if (!staff) return res.status(404).json({ msg: "Staff not found" });
-
-    // Make sure users owns staff
-    if (staff.user.toString() !== req.user.id) {
-      return res.status(401).json({ msg: "Not authorized" });
-    }
 
     await Staff.findByIdAndRemove(req.params.id);
 

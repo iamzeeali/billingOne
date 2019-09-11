@@ -1,20 +1,48 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { Link, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { addStaff } from "../../_actions/staff";
+import { editStaff, getCurrentStaff } from "../../_actions/staff";
 
-const AddStaff = ({ addStaff, history }) => {
+const EditStaff = ({
+  staff: { staff, loading },
+  editStaff,
+  getCurrentStaff,
+  history,
+  match
+}) => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     username: "",
     password: "",
+    password2: "",
     mobile: "",
     email: ""
   });
 
-  const { firstName, lastName, username, password, mobile, email } = formData;
+  useEffect(() => {
+    getCurrentStaff(match.params.id);
+    setFormData({
+      firstName: loading || !staff.firstName ? "" : staff.firstName,
+      lastName: loading || !staff.lastName ? "" : staff.lastName,
+      username: loading || !staff.username ? "" : staff.username,
+      password: loading || !staff.password ? "" : staff.password,
+      password2: loading || !staff.password2 ? "" : staff.password2,
+      mobile: loading || !staff.mobile ? "" : staff.mobile,
+      email: loading || !staff.email ? "" : staff.email
+    });
+  }, [loading, getCurrentStaff]);
+
+  const {
+    firstName,
+    lastName,
+    username,
+    password,
+    password2,
+    mobile,
+    email
+  } = formData;
 
   const onChangeHandler = e => {
     e.preventDefault();
@@ -23,7 +51,7 @@ const AddStaff = ({ addStaff, history }) => {
 
   const onSubmitHandler = e => {
     e.preventDefault();
-    addStaff(formData, history);
+    editStaff(formData, history, match.params.id);
   };
 
   return (
@@ -32,10 +60,24 @@ const AddStaff = ({ addStaff, history }) => {
         <Link to="/staffs" className="btn btn-primary">
           <i class="fa fa-arrow-left"> </i> Go Back
         </Link>
-        <h1 className="pt-4">Add Employee</h1>
-        <small className="lead">
-          Welcome a new Employee to your company...
-        </small>
+        <br />
+        <br />
+        <div class="jumbotron container bg-primary text-white p-2">
+          <div class="container text-center">
+            <img
+              src="https://99wtf.net/wp-content/uploads/2018/05/professional-short-hairstyles-for-men-with-thick-hair-and-square-face.jpg?ezimgfmt=rs:352x352/rscb1"
+              alt="..."
+              className="rounded-circle img-thumbnail"
+              width="150px"
+              height="150px"
+            />
+            <h1 class="display-4">{firstName + " " + lastName}</h1>
+            <small>
+              <i className="fa fa-envelope"> </i> {email} &nbsp;&nbsp;
+              <i className="fa fa-mobile"> </i> {mobile}
+            </small>
+          </div>
+        </div>
       </div>
 
       <form onSubmit={onSubmitHandler}>
@@ -98,6 +140,7 @@ const AddStaff = ({ addStaff, history }) => {
               className="form-control"
               placeholder="*******"
               name="password2"
+              value={password2}
               onChange={e => onChangeHandler(e)}
             />
           </div>
@@ -138,11 +181,17 @@ const AddStaff = ({ addStaff, history }) => {
   );
 };
 
-AddStaff.propTypes = {
-  addStaff: PropTypes.func.isRequired
+EditStaff.propTypes = {
+  editStaff: PropTypes.func.isRequired,
+  getCurrentStaff: PropTypes.func.isRequired,
+  staff: PropTypes.object.isRequired
 };
 
+const mapStateToProps = state => ({
+  staff: state.staff
+});
+
 export default connect(
-  null,
-  { addStaff }
-)(withRouter(AddStaff));
+  mapStateToProps,
+  { editStaff, getCurrentStaff }
+)(withRouter(EditStaff));
